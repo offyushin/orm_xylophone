@@ -34,13 +34,14 @@ class _XylophoneAppState extends State<XylophoneApp> {
 
   List<int> _soundIds = [];
 
+  bool _isLoading = true;
+
   @override
   void initState() {
     super.initState();
     initSoundPoll();
-    
   }
-  
+
   Future<void> initSoundPoll() async {
     int soundId = await rootBundle
         .load('assets/do1.wav')
@@ -89,6 +90,10 @@ class _XylophoneAppState extends State<XylophoneApp> {
         .then((soundData) => pool.load(soundData));
 
     _soundIds.add(soundId);
+
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
@@ -100,56 +105,65 @@ class _XylophoneAppState extends State<XylophoneApp> {
         title: const Text('실로폰'),
       ),
       body: SafeArea(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: gunban('도', Colors.redAccent),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24.0),
-              child: gunban('레', Colors.orangeAccent),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 32.0),
-              child: gunban('미', Colors.orange),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 40.0),
-              child: gunban('파', Colors.deepOrangeAccent),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 48.0),
-              child: gunban('솔', Colors.cyan),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 56.0),
-              child: gunban('라', Colors.blueAccent),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 64.0),
-              child: gunban('시', Colors.purpleAccent),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 72.0),
-              child: gunban('도', Colors.redAccent),
-            ),
-          ],
-        ),
+        child: _isLoading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: gunban('도', Colors.redAccent, _soundIds[0]),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 24.0),
+                    child: gunban('레', Colors.orangeAccent, _soundIds[1]),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 32.0),
+                    child: gunban('미', Colors.orange, _soundIds[2]),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 40.0),
+                    child: gunban('파', Colors.deepOrangeAccent, _soundIds[3]),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 48.0),
+                    child: gunban('솔', Colors.cyan, _soundIds[4]),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 56.0),
+                    child: gunban('라', Colors.blueAccent, _soundIds[5]),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 64.0),
+                    child: gunban('시', Colors.purpleAccent, _soundIds[6]),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 72.0),
+                    child: gunban('도', Colors.redAccent, _soundIds[7]),
+                  ),
+                ],
+              ),
       ),
     );
   }
 
-  Widget gunban(String text, Color color) {
-    return Container(
-      width: 50,
-      height: double.infinity,
-      color: color,
-      child: Center(
-        child: Text(
-          text,
-          style: TextStyle(color: Colors.white),
+  Widget gunban(String text, Color color, int soundId) {
+    return GestureDetector(
+      onTap: () {
+        pool.play(soundId);
+      },
+      child: Container(
+        width: 50,
+        height: double.infinity,
+        color: color,
+        child: Center(
+          child: Text(
+            text,
+            style: TextStyle(color: Colors.white),
+          ),
         ),
       ),
     );
