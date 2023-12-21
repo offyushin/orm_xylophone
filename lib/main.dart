@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:soundpool/soundpool.dart';
 
 void main() {
   runApp(const MyApp());
@@ -8,12 +9,12 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-    @override
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-                                                                                                                                colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
       home: const XylophoneApp(),
@@ -21,14 +22,78 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class XylophoneApp extends StatelessWidget {
+class XylophoneApp extends StatefulWidget {
   const XylophoneApp({super.key});
 
   @override
+  State<XylophoneApp> createState() => _XylophoneAppState();
+}
+
+class _XylophoneAppState extends State<XylophoneApp> {
+  Soundpool pool = Soundpool.fromOptions(options: SoundpoolOptions.kDefault);
+
+  List<int> _soundIds = [];
+
+  @override
+  void initState() {
+    super.initState();
+    initSoundPoll();
+    
+  }
+  
+  Future<void> initSoundPoll() async {
+    int soundId = await rootBundle
+        .load('assets/do1.wav')
+        .then((soundData) => pool.load(soundData));
+
+    _soundIds.add(soundId);
+
+    soundId = await rootBundle
+        .load('assets/re.wav')
+        .then((soundData) => pool.load(soundData));
+
+    _soundIds.add(soundId);
+
+    soundId = await rootBundle
+        .load('assets/mi.wav')
+        .then((soundData) => pool.load(soundData));
+
+    _soundIds.add(soundId);
+
+    soundId = await rootBundle
+        .load('assets/fa.wav')
+        .then((soundData) => pool.load(soundData));
+
+    _soundIds.add(soundId);
+
+    soundId = await rootBundle
+        .load('assets/sol.wav')
+        .then((soundData) => pool.load(soundData));
+
+    _soundIds.add(soundId);
+
+    soundId = await rootBundle
+        .load('assets/la.wav')
+        .then((soundData) => pool.load(soundData));
+
+    _soundIds.add(soundId);
+
+    soundId = await rootBundle
+        .load('assets/si.wav')
+        .then((soundData) => pool.load(soundData));
+
+    _soundIds.add(soundId);
+
+    soundId = await rootBundle
+        .load('assets/do2.wav')
+        .then((soundData) => pool.load(soundData));
+
+    _soundIds.add(soundId);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeLeft
-    ]);
+    SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft]);
 
     return Scaffold(
       appBar: AppBar(
@@ -75,6 +140,7 @@ class XylophoneApp extends StatelessWidget {
       ),
     );
   }
+
   Widget gunban(String text, Color color) {
     return Container(
       width: 50,
@@ -89,4 +155,3 @@ class XylophoneApp extends StatelessWidget {
     );
   }
 }
-
